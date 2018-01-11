@@ -15,12 +15,12 @@ Backbone.Model.Base = Backbone.Model.extend({
 
   get: function get(attr, opts) {
     if (opts.recursive === true) {
-      var segs = attr.split(/(\[|\]|\.)+/);
-      attr = segs.shift();
-      var val = this.get(attr, { recursive: false });
+      var segs = _attr.split(/(\[|\]|\.)+/);
+      var _attr = segs.shift();
+      var val = this.get(_attr, { recursive: false });
 
       var isModel = false;
-      if (this.attributeTypes.hasOwnProperty(attr) && this.attributeTypes[attr] && typeof this.attributeTypes[attr] === 'function' && ((isModel = this.attributeTypes[attr] === Backbone.Model.Base || this.attributeTypes[attr].prototype instanceof Backbone.Model.Base) || this.attributeTypes[attr] === Backbone.Collection || this.attributeTypes[attr].prototype instanceof Backbone.Collection) && val instanceof this.attributeTypes[attr]) {
+      if (this.attributeTypes.hasOwnProperty(_attr) && this.attributeTypes[_attr] && typeof this.attributeTypes[_attr] === 'function' && ((isModel = this.attributeTypes[_attr] === Backbone.Model.Base || this.attributeTypes[_attr].prototype instanceof Backbone.Model.Base) || this.attributeTypes[_attr] === Backbone.Collection || this.attributeTypes[_attr].prototype instanceof Backbone.Collection) && val instanceof this.attributeTypes[_attr]) {
 
         if (isModel) {
           if (segs.length > 0) {
@@ -34,6 +34,12 @@ Backbone.Model.Base = Backbone.Model.extend({
             }
           }
         }
+      }
+
+      if (segs.length > 0) {
+        return segs.reduce(function (o, i) {
+          return o[Array.isArray(o) ? +i : i];
+        }, val);
       }
 
       return val;

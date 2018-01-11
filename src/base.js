@@ -8,7 +8,7 @@ Backbone.Model.Base = Backbone.Model.extend({
   get: function(attr, opts) {
     if (opts.recursive === true) {
       const segs = attr.split(/(\[|\]|\.)+/)
-      attr = segs.shift()
+      const attr = segs.shift()
       const val = this.get(attr, { recursive: false })
 
       let isModel = false
@@ -33,6 +33,10 @@ Backbone.Model.Base = Backbone.Model.extend({
               }
             }
           }
+      }
+
+      if (segs.length > 0) {
+        return segs.reduce((o, i) => o[Array.isArray(o) ? +i : i], val)
       }
 
       return val
